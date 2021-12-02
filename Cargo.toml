@@ -27,6 +27,20 @@ name = "zero2prod"
 serde = { version = "1", features = ["derive"]}
 actix-http = "=3.0.0-beta.10"
 actix-web = "=4.0.0-beta.9"
+config = "0.11.0"
+
+# Using table-like toml syntax to avoid a super-long line!
+[dependencies.sqlx]
+version = "0.5.7"
+default-features = false
+features = [
+    "runtime-actix-rustls",
+    "macros",
+    "postgres",
+    "uuid",
+    "chrono",
+    "migrate"
+]
 
 [dev-dependencies]
 reqwest = "0.11"
