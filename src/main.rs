@@ -15,7 +15,6 @@ async fn main() -> std::io::Result<()> {
         .connect_timeout(std::time::Duration::from_secs(2))
         .connect_lazy_with(configuration.database.with_db());
 
-    // We have removed the hard-coded `8000` - it's now coming from our settings!
     let address = format!(
         "{}:{}",
         configuration.application.host, configuration.application.port
