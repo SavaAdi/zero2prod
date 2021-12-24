@@ -34,8 +34,6 @@ impl EmailClient {
         html_content: &str,
         text_content: &str,
     ) -> Result<(), reqwest::Error> {
-        // You can do better using `reqwest::Url::join` if you change
-        // `base_url`'s type from `String` to `reqwest::Url`.
         let url = format!("{}/email", self.base_url);
         let request_body = SendEmailRequest {
             from: self.sender.as_ref().to_owned(),
@@ -46,8 +44,7 @@ impl EmailClient {
         };
 
         // json method also sets Content-Type header to application/json
-        let builder = self
-            .http_client
+        self.http_client
             .post(&url)
             .header("X-Postmark-Server-Token", &self.authorization_token)
             .json(&request_body)
@@ -64,7 +61,7 @@ mod tests {
     use fake::faker::internet::en::SafeEmail;
     use fake::faker::lorem::en::{Paragraph, Sentence};
     use fake::{Fake, Faker};
-    use wiremock::matchers::any;
+    use wiremock::matchers::{header, header_exists, method, path};
     use wiremock::{Mock, MockServer, ResponseTemplate};
 
     #[tokio::test]
@@ -74,7 +71,10 @@ mod tests {
         let sender = SubscriberEmail::parse(SafeEmail().fake()).unwrap();
         let email_client = EmailClient::new(mock_server.uri(), sender, Faker.fake());
 
-        Mock::given(any())
+        Mock::given(header_exists("X-Postmark-Server-Token"))
+            .and(header("Content-Type", "application/json"))
+            .and(path("/email"))
+            .and(method("POST"))
             .respond_with(ResponseTemplate::new(200))
             .expect(1)
             .mount(&mock_server)
