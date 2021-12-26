@@ -44,12 +44,23 @@ Using `sqlx`:
 ```bash
 sqlx migrate add add_status_to_subscriptions
 ```
-Add sql code into the newly generated .sql files. Then
+Add sql code into the newly generated .sql files. Then either use:
 
 ```bash
 sqlx migrate run
 ```
 
+or:
+
+```bash
+SKIP_DOCKER=true ./scripts/init_db.sh
+```
+Finally, since we are using sqlx we MUST also invoke:
+
+```bash
+cargo sqlx prepare -- --bin zero2prod
+```
+This will let our CI/CD pipeline do an offline check of our migrations
 ## Known issues when running the test suite:
 
 If you are running `cargo test` on Linux and see errors like
