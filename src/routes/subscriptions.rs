@@ -44,17 +44,13 @@ pub async fn subscribe(
         return HttpResponse::InternalServerError().finish();
     }
 
-    if insert_subscriber(&pool, &new_subscriber).await.is_err() {
-        return HttpResponse::InternalServerError().finish();
-    }
-
     if send_confirmation_email(&email_client, new_subscriber)
         .await
         .is_err()
     {
         return HttpResponse::InternalServerError().finish();
     }
-    
+
     HttpResponse::Ok().finish()
 }
 
