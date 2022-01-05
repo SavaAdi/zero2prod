@@ -2,7 +2,7 @@ use crate::helpers::spawn_app;
 use wiremock::matchers::{method, path};
 use wiremock::{Mock, ResponseTemplate};
 
-#[actix_rt::test]
+#[tokio::test]
 async fn subscribe_returns_a_200_for_valid_form_data() {
     // Arrange
     let app = spawn_app().await;
@@ -22,7 +22,7 @@ async fn subscribe_returns_a_200_for_valid_form_data() {
     assert_eq!(200, response.status().as_u16());
 }
 
-#[actix_rt::test]
+#[tokio::test]
 async fn subscribe_persists_the_new_subscriber() {
     // Arrange
     let app = spawn_app().await;
@@ -42,7 +42,7 @@ async fn subscribe_persists_the_new_subscriber() {
     assert_eq!(saved.status, "pending_confirmation");
 }
 
-#[actix_rt::test]
+#[tokio::test]
 async fn subscribe_returns_a_400_when_data_is_missing() {
     // Arrange
     let app = spawn_app().await;
@@ -67,7 +67,7 @@ async fn subscribe_returns_a_400_when_data_is_missing() {
     }
 }
 
-#[actix_rt::test]
+#[tokio::test]
 async fn subscribe_returns_a_400_when_fields_are_present_but_invalid() {
     // Arrange
     let app = spawn_app().await;
@@ -91,7 +91,7 @@ async fn subscribe_returns_a_400_when_fields_are_present_but_invalid() {
     }
 }
 
-#[actix_rt::test]
+#[tokio::test]
 async fn subscribe_sends_a_confirmation_email_for_valid_data() {
     // Arrange
     let app = spawn_app().await;
@@ -111,7 +111,7 @@ async fn subscribe_sends_a_confirmation_email_for_valid_data() {
     // Mock asserts on drop
 }
 
-#[actix_rt::test]
+#[tokio::test]
 async fn subscribe_sends_a_confirmation_email_with_a_link() {
     // Arrange
     let app = spawn_app().await;
@@ -134,7 +134,7 @@ async fn subscribe_sends_a_confirmation_email_with_a_link() {
     assert_eq!(confirmation_links.html, confirmation_links.plain_text);
 }
 
-#[actix_rt::test]
+#[tokio::test]
 async fn subscribe_fails_if_there_is_a_fatal_database_error() {
     // Arrange
     let app = spawn_app().await;
