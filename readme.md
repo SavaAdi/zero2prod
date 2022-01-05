@@ -36,7 +36,7 @@ cargo test
 or
 
 ```bash
-TEST_LOG=true cargo test health_check_works | bunyan
+RUST_LOG="sqlx=error,info" TEST_LOG=true cargo test health_check_works | bunyan
 ```
 ## How to add migrations
 
