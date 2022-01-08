@@ -20,6 +20,7 @@ path = "src/main.rs"
 name = "zero2prod"
 
 [dependencies]
+anyhow = "1"
 thiserror = "1"
 serde = "1.0.115"
 actix-web = "=4.0.0-beta.19"
